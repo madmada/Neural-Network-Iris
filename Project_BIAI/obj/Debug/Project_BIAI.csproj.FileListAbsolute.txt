@@ -1,0 +1,16 @@
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\bin\Debug\Project_BIAI.exe.config
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\bin\Debug\Project_BIAI.exe
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\bin\Debug\Project_BIAI.pdb
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\obj\Debug\Project_BIAI.csprojResolveAssemblyReference.cache
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\obj\Debug\Project_BIAI.csproj.CoreCompileInputs.cache
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\obj\Debug\Project_BIAI.exe
+E:\Szkoła\rok3\sem6\BIAI\Projekt\Project_BIAI\Project_BIAI\obj\Debug\Project_BIAI.pdb
+S:\studia\BIAI\Project_BIAI\Project_BIAI\bin\Debug\Project_BIAI.exe.config
+S:\studia\BIAI\Project_BIAI\Project_BIAI\obj\Debug\Project_BIAI.exe
+S:\studia\BIAI\Project_BIAI\Project_BIAI\obj\Debug\Project_BIAI.pdb
+S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\bin\Debug\Project_BIAI.exe.config
+S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\obj\Debug\Project_BIAI.exe
+S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\obj\Debug\Project_BIAI.pdb
+S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\bin\Debug\Project_BIAI.exe
+S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\bin\Debug\Project_BIAI.pdb
+S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\obj\Debug\Project_BIAI.csprojResolveAssemblyReference.cache
