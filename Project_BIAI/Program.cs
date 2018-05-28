@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 class Program
 {
-    private double[][] data = null;
-    private double[][] dataForTest = null;
-    private double[][] dataForTraining = null;
-
     private const int input = 4;
     private const int hidden = 7;
     private const int output = 3;
@@ -44,18 +40,18 @@ class Program
         //TRAINING
 
         //Settings for training
-        int epochos = 2000;
+        int epochs = 2000;
         double learnRate = 0.05;
         double momentum = 0.01;
         double weightDecay = 0.0001;
         Console.WriteLine("Start training");
         DateTime startTime = DateTime.Now;
-        nn.training(dataForTest, epochos, learnRate, momentum, weightDecay); 
+        nn.Training(dataForTest, epochs, learnRate, momentum, weightDecay); 
         DateTime stopTime = DateTime.Now;
         TimeSpan roznica = stopTime - startTime;
         Console.WriteLine("Training time:" + roznica.TotalSeconds);
         Console.WriteLine("Training completed!");
-        double[] weights = nn.getWeights();
+        double[] weights = nn.GetWeights();
 
         //Console.WriteLine("nn weights and bias values:");
         //Tools.showVector(weights, 10, 3, true);
@@ -79,7 +75,15 @@ class Program
             Console.WriteLine("Please enter 4 values [sepal length, sepal width, petal length, petal width]: ");
             for (int a = 0; a < 4; a++)
             {
-                numbers[a] = Convert.ToDouble(Console.ReadLine(), System.Globalization.CultureInfo.InvariantCulture);
+                try
+                {
+                    numbers[a] = Convert.ToDouble(Console.ReadLine(), System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("Wrong value, try again!");
+                    Console.WriteLine(e.GetBaseException());
+                }
                 if (numbers[a] <= 0 )
                 {
                     Console.WriteLine("Wrong Value!");
@@ -88,8 +92,10 @@ class Program
             }
             Console.WriteLine(Tools.outputType(ref nn, DataPrepare.normalizeInput(numbers, data)));
             Console.WriteLine("Would you like to test again ? [Y/N]");
+           
             userInput = Console.ReadLine();
             Tools.checkInputAnswer(userInput);
+            
         }
     }
 }

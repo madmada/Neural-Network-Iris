@@ -12,7 +12,7 @@ class Tools
     {
         string ret = "";
         const int tot_len = 3;
-        double[] results = nn.forward(numbers);
+        double[] results = nn.Forward(numbers);
         for (int a = 0; a < tot_len; ++a)
         {
             if (results[a] + 0.15 > 1)

@@ -27,7 +27,7 @@ public class NeuralNetwork
     private double[] hiddenGradient; // hidden gradients
 
     // back-prop previous weights -> momentum specific arrays 
-    private double[][] ihPrevWeightsDelta;  // for momentum with back-propagation
+    private double[][] ihPrevWeightsDelta;  // for momentum (współczynnik wygładzania) with back-propagation
     private double[] hiddenPrevBiasesDelta;
     private double[][] hoPrevWeightsDelta;
     private double[] outputPrevBiasesDelta;
@@ -69,7 +69,7 @@ public class NeuralNetwork
     }
 
 
-    private static void shuffle(int[] indexs)
+    private static void Shuffle(int[] indexs)
     {
         for (int i = 0; i < indexs.Length; ++i)
         {
@@ -80,7 +80,7 @@ public class NeuralNetwork
         }
     }
 
-    public void setWeights(double[] weights)
+    public void SetWeights(double[] weights)
     {
         // copy all weights and all biases in weights[] array 
         //to i-h weights, i-h biases, h-o weights, h-o biases
@@ -110,10 +110,10 @@ public class NeuralNetwork
         {
             initWeights[i] = (hi - lo) * r.NextDouble() + lo; //init to small random values
         }
-        this.setWeights(initWeights);
+        this.SetWeights(initWeights);
     }
 
-    public double[] getWeights()
+    public double[] GetWeights()
     {
         // return weights, after training
         int numberOfWeights = (input * hidden) + (hidden * output) + hidden + output;
@@ -133,7 +133,7 @@ public class NeuralNetwork
     }
 
     // Performing feedforward algorithm
-    public double[] forward(double[] values)
+    public double[] Forward(double[] values)
     {
         double[] hiddenSums = new double[hidden]; // sums of hidden nodes 
         double[] outputSums = new double[output]; // sums of output nodes
@@ -150,7 +150,7 @@ public class NeuralNetwork
             hiddenSums[i] += this.hiddenBiases[i];
 
         for (int i = 0; i < hidden; ++i)   // ACTIVATION
-            this.hiddens[i] = hyperTang(hiddenSums[i]);
+            this.hiddens[i] = HyperTang(hiddenSums[i]);
 
         for (int j = 0; j < output; ++j)   //h-o sum of weights * hOutputs
             for (int i = 0; i < hidden; ++i)
@@ -159,7 +159,7 @@ public class NeuralNetwork
         for (int i = 0; i < output; ++i)  // add biases to input-to-hidden sums
             outputSums[i] += outputBiases[i];
 
-        double[] softOutput = softmax(outputSums); // softmax activation 
+        double[] softOutput = Softmax(outputSums); // softmax activation 
         Array.Copy(softOutput, outputs, softOutput.Length);
 
         double[] result = new double[output];
@@ -167,14 +167,14 @@ public class NeuralNetwork
         return result;
     }
 
-    private static double hyperTang(double t)
+    private static double HyperTang(double t)
     {
         if (t < -20.0) return -1.0;
         else if (t > 20.0) return 1.0;
         else return Math.Tanh(t);
     }
 
-    private static double[] softmax(double[] outputSums)
+    private static double[] Softmax(double[] outputSums)
     {
         double max = outputSums[0];
         for (int i = 0; i < outputSums.Length; ++i)
@@ -193,7 +193,7 @@ public class NeuralNetwork
     }
 
 
-    private void backPropagation(double[] targetValues, double learnRate, double momentum, double weightDecay)
+    private void BackPropagation(double[] targetValues, double learnRate, double momentum, double weightDecay)
     {
 
         //output gradients
@@ -268,7 +268,7 @@ public class NeuralNetwork
         }
     }
         
-    public void training(double[][] trainData, int epochs, double learnRate, double momentum, double weightDecay)
+    public void Training(double[][] trainData, int epochs, double learnRate, double momentum, double weightDecay)
     {
         int epoch = 0;
         double[] inputValues = new double[input]; // inputs
@@ -287,14 +287,14 @@ public class NeuralNetwork
                 break;
             }
 
-            shuffle(indexs);
+            Shuffle(indexs);
             for (int i = 0; i < trainData.Length; ++i)
             {
                 int j = indexs[i];
                 Array.Copy(trainData[j], inputValues, input);
                 Array.Copy(trainData[j], input, targetValues, 0, output);
-                forward(inputValues); //store
-                backPropagation(targetValues, learnRate, momentum, weightDecay); // find better weights using backpropagation
+                Forward(inputValues); //store
+                BackPropagation(targetValues, learnRate, momentum, weightDecay); // find better weights using backpropagation
             }
             ++epoch;
         }
@@ -310,7 +310,7 @@ public class NeuralNetwork
         {
             Array.Copy(data[i], inputValues, input);
             Array.Copy(data[i], input, targetValues, 0, output); // get target values
-            double[] myOutputValues = this.forward(inputValues); // compute output and use current weights
+            double[] myOutputValues = this.Forward(inputValues); // compute output and use current weights
             for (int j = 0; j < output; ++j)
             {
                 double error = targetValues[j] - myOutputValues[j];
@@ -350,7 +350,7 @@ public class NeuralNetwork
             Array.Copy(data[i], input, targetValues, 0, output); //and target Values 
 
             // FEEDFORWARD
-            myOutputValues = this.forward(inputValues);
+            myOutputValues = this.Forward(inputValues);
             int placeOf1 = maxIndex(myOutputValues); // where is 1 ? ? ? ?
 
             if (targetValues[placeOf1] == 1.0) // if 1 is in good place 

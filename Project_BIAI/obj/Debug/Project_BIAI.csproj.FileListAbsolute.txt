@@ -14,3 +14,10 @@ S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\obj\Debug\Project_BIAI.pdb
 S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\bin\Debug\Project_BIAI.exe
 S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\bin\Debug\Project_BIAI.pdb
 S:\studia\BIAI\Neural-Network-Iris\Project_BIAI\obj\Debug\Project_BIAI.csprojResolveAssemblyReference.cache
+E:\Projekt BIAI\Project_BIAI\bin\Debug\Project_BIAI.exe.config
+E:\Projekt BIAI\Project_BIAI\bin\Debug\Project_BIAI.exe
+E:\Projekt BIAI\Project_BIAI\bin\Debug\Project_BIAI.pdb
+E:\Projekt BIAI\Project_BIAI\obj\Debug\Project_BIAI.csprojAssemblyReference.cache
+E:\Projekt BIAI\Project_BIAI\obj\Debug\Project_BIAI.csproj.CoreCompileInputs.cache
+E:\Projekt BIAI\Project_BIAI\obj\Debug\Project_BIAI.exe
+E:\Projekt BIAI\Project_BIAI\obj\Debug\Project_BIAI.pdb
