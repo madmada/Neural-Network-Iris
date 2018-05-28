@@ -6,61 +6,61 @@ using System.Threading.Tasks;
 
 class Program
 {
-    private const int input = 4;
-    private const int hidden = 7;
-    private const int output = 3;
-
     static void Main(string[] args)
     {
         Console.WriteLine("****************** BIAI PROJECT - Neural Network ******************");
         Console.WriteLine("******************  Adam Pałka & Jakub Walczak  *******************\n");
-        Console.WriteLine(" 0 0 1 = Iris Setosa");
+        Console.WriteLine(" 1 0 0 = Iris Virginica");
         Console.WriteLine(" 0 1 0 = Iris Versicolor");
-        Console.WriteLine(" 1 0 0 = Iris Virginica\n");
+        Console.WriteLine(" 0 0 1 = Iris Setosa\n");
         Console.WriteLine("DATA: sepal length, sepal width, petal length, petal width");
-        Console.WriteLine("INPUTA DATA example: 5.4, 3.4, 1.7, 0.2");
+        Console.WriteLine("INPUTA DATA example: 5.1, 3.5, 1.4, 0.2");
         Console.WriteLine("*******************************************************************\n\n");
 
         double[][] data = null;
-        Tools.fileReader(ref data, @"..\..\DANE.txt"); //reading data from file
         double[][] dataForTest = null;
         double[][] dataForTraining = null;
-        DataPrepare.makeTrainTest(data, out dataForTest, out dataForTraining);
-        DataPrepare.normalize(dataForTest, new int[] { 0, 1, 2, 3 });
-        DataPrepare.normalize(dataForTraining, new int[] { 0, 1, 2, 3 });
+
+        Tools.FileReader(ref data, @"..\..\DATASET.txt"); //reading data from file
+        
+        DataPrepare.MakeTrainTest(data, ref dataForTest, ref dataForTraining);
+
+        DataPrepare.Normalize(dataForTest, new int[] { 0, 1, 2, 3 });
+
+        DataPrepare.Normalize(dataForTraining, new int[] { 0, 1, 2, 3 });
 
         Console.WriteLine("Creating neural network...");
         
         const int input = 4;
         const int hidden = 7;
         const int output = 3;
-        NeuralNetwork nn = new NeuralNetwork(input, hidden, output);
-        nn.InitializeWeights(); //Initializing weights and bias to small random values
+        NeuralNetwork neuralNetwork = new NeuralNetwork(input, hidden, output);
+        neuralNetwork.InitializeWeights(); //Initializing weights and bias to small random values
 
         //TRAINING
 
         //Settings for training
-        int epochs = 2000;
+        int epochos = 2000;
         double learnRate = 0.05;
         double momentum = 0.01;
         double weightDecay = 0.0001;
         Console.WriteLine("Start training");
         DateTime startTime = DateTime.Now;
-        nn.Training(dataForTest, epochs, learnRate, momentum, weightDecay); 
+        neuralNetwork.Training(dataForTraining, epochos, learnRate, momentum, weightDecay); 
         DateTime stopTime = DateTime.Now;
-        TimeSpan roznica = stopTime - startTime;
-        Console.WriteLine("Training time:" + roznica.TotalSeconds);
+        TimeSpan timeDifference = stopTime - startTime;
+        Console.WriteLine("Training time:" + timeDifference.TotalSeconds);
         Console.WriteLine("Training completed!");
-        double[] weights = nn.GetWeights();
+        double[] weights = neuralNetwork.GetWeights();
 
         //Console.WriteLine("nn weights and bias values:");
         //Tools.showVector(weights, 10, 3, true);
 
         //Accurancy
-        double accurancyTrain = nn.accuracy(dataForTest);
+        double accurancyTrain = neuralNetwork.Accuracy(dataForTraining);
         Console.WriteLine("--------------------Accurancy on Neural Network--------------------  ");
         Console.WriteLine("\nAccuracy on training data = " + accurancyTrain.ToString("F2"));
-        double accurancyTest = nn.accuracy(dataForTraining);
+        double accurancyTest = neuralNetwork.Accuracy(dataForTest);
         Console.WriteLine("Accuracy on test data = " + accurancyTest.ToString("F2"));
 
         //TESTING BY USER
@@ -69,7 +69,7 @@ class Program
         Console.WriteLine("\n-------------------------------------------------------------------  ");
         Console.WriteLine("Would you like to test ? [Y/N]");
         userInput = Console.ReadLine();
-        Tools.checkInputAnswer(userInput);       
+        Tools.CheckInputAnswer(userInput);       
         while (userInput.ToUpper() == "Y")
         {
             Console.WriteLine("Please enter 4 values [sepal length, sepal width, petal length, petal width]: ");
@@ -82,19 +82,19 @@ class Program
                 catch(Exception e)
                 {
                     Console.WriteLine("Wrong value, try again!");
-                    Console.WriteLine(e.GetBaseException());
+                    //Console.WriteLine(e.GetBaseException());
                 }
                 if (numbers[a] <= 0 )
                 {
-                    Console.WriteLine("Wrong Value!");
+                    Console.WriteLine("Wrong value, try again!");
                     a--;
                 }
             }
-            Console.WriteLine(Tools.outputType(ref nn, DataPrepare.normalizeInput(numbers, data)));
+            Console.WriteLine(Tools.OutputType(ref neuralNetwork, DataPrepare.NormalizeInput(numbers, data)));
             Console.WriteLine("Would you like to test again ? [Y/N]");
            
             userInput = Console.ReadLine();
-            Tools.checkInputAnswer(userInput);
+            Tools.CheckInputAnswer(userInput);
             
         }
     }

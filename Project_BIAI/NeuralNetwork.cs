@@ -31,7 +31,7 @@ public class NeuralNetwork
     private double[] hiddenPrevBiasesDelta;
     private double[][] hoPrevWeightsDelta;
     private double[] outputPrevBiasesDelta;
-    private static Random r;
+    private static Random random;
 
     public NeuralNetwork(int numInput, int numHidden, int numOutput)
     {
@@ -40,11 +40,11 @@ public class NeuralNetwork
         this.output = numOutput;
 
         this.inputs = new double[numInput]; //values
-        this.outputs = new double[numOutput];
         this.hiddens = new double[numHidden];
+        this.outputs = new double[numOutput];
 
-        this.weightsIH = createMatrix(numInput, numHidden); //weights for neural network
-        this.weightsHO = createMatrix(numHidden, numOutput);
+        this.weightsIH = CreateMatrix(numInput, numHidden); //weights for neural network
+        this.weightsHO = CreateMatrix(numHidden, numOutput);
         this.outputBiases = new double[numOutput];
         this.hiddenBiases = new double[numHidden];
 
@@ -52,19 +52,19 @@ public class NeuralNetwork
         this.hiddenGradient = new double[numHidden];
         this.outputGradient = new double[numOutput];
 
-        this.ihPrevWeightsDelta = createMatrix(numInput, numHidden);
+        this.ihPrevWeightsDelta = CreateMatrix(numInput, numHidden);
         this.hiddenPrevBiasesDelta = new double[numHidden];
-        this.hoPrevWeightsDelta = createMatrix(numHidden, numOutput);
+        this.hoPrevWeightsDelta = CreateMatrix(numHidden, numOutput);
         this.outputPrevBiasesDelta = new double[numOutput];
-        r = new Random(0); //shuffle,initWeights
+        random = new Random(0); //shuffle,initWeights
     }
 
-    private static double[][] createMatrix(int rows, int cols)
+    private static double[][] CreateMatrix(int rows, int cols)
     {
         //Create matrix
         double[][] matrix = new double[rows][];
-        for (int r = 0; r < matrix.Length; ++r)
-            matrix[r] = new double[cols];
+        for (int i = 0; i < matrix.Length; ++i)
+            matrix[i] = new double[cols];
         return matrix;
     }
 
@@ -73,32 +73,12 @@ public class NeuralNetwork
     {
         for (int i = 0; i < indexs.Length; ++i)
         {
-            int r = NeuralNetwork.r.Next(i, indexs.Length);
+            int r = NeuralNetwork.random.Next(i, indexs.Length);
             int tmp = indexs[r];
             indexs[r] = indexs[i];
             indexs[i] = tmp;
         }
     }
-
-    public void SetWeights(double[] weights)
-    {
-        // copy all weights and all biases in weights[] array 
-        //to i-h weights, i-h biases, h-o weights, h-o biases
-
-        int helper = 0;
-
-        for (int i = 0; i < input; ++i)
-            for (int j = 0; j < hidden; ++j)
-                weightsIH[i][j] = weights[helper++];
-        for (int i = 0; i < hidden; ++i)
-            hiddenBiases[i] = weights[helper++];
-        for (int i = 0; i < hidden; ++i)
-            for (int j = 0; j < output; ++j)
-                weightsHO[i][j] = weights[helper++];
-        for (int i = 0; i < output; ++i)
-            outputBiases[i] = weights[helper++];
-    }
-
     public void InitializeWeights()
     {
         // initialize weights and biases
@@ -108,11 +88,28 @@ public class NeuralNetwork
         double hi = 0.01;
         for (int i = 0; i < initWeights.Length; ++i)
         {
-            initWeights[i] = (hi - lo) * r.NextDouble() + lo; //init to small random values
+            initWeights[i] = (hi - lo) * random.NextDouble() + lo; //init to small random values
         }
         this.SetWeights(initWeights);
     }
+    public void SetWeights(double[] weights)
+    {
+        //copy all weights and all biases in weights[] array 
+        //to i-h weights, i-h biases, h-o weights, h-o biases
 
+        int index = 0;
+
+        for (int i = 0; i < input; ++i)
+            for (int j = 0; j < hidden; ++j)
+                weightsIH[i][j] = weights[index++];
+        for (int i = 0; i < hidden; ++i)
+            for (int j = 0; j < output; ++j)
+                weightsHO[i][j] = weights[index++];
+        for (int i = 0; i < hidden; ++i)
+            hiddenBiases[i] = weights[index++];
+        for (int i = 0; i < output; ++i)
+            outputBiases[i] = weights[index++];
+    }
     public double[] GetWeights()
     {
         // return weights, after training
@@ -142,9 +139,9 @@ public class NeuralNetwork
         for (int i = 0; i < values.Length; ++i)
             this.inputs[i] = values[i];
 
-        for (int j = 0; j < hidden; ++j)  // i-h sum of weights * inputs
-            for (int i = 0; i < input; ++i)
-                hiddenSums[j] += this.inputs[i] * this.weightsIH[i][j];
+        for (int i = 0; i < hidden; ++i)  // i-h sum of weights * inputs
+            for (int j = 0; j < input; ++j)
+                hiddenSums[i] += this.inputs[j] * this.weightsIH[j][i];
 
         for (int i = 0; i < hidden; ++i)  //add biases to input-to-hidden sums
             hiddenSums[i] += this.hiddenBiases[i];
@@ -152,9 +149,9 @@ public class NeuralNetwork
         for (int i = 0; i < hidden; ++i)   // ACTIVATION
             this.hiddens[i] = HyperTang(hiddenSums[i]);
 
-        for (int j = 0; j < output; ++j)   //h-o sum of weights * hOutputs
-            for (int i = 0; i < hidden; ++i)
-                outputSums[j] += hiddens[i] * weightsHO[i][j];
+        for (int i = 0; i < output; ++i)   //h-o sum of weights * hOutputs
+            for (int j = 0; j < hidden; ++j)
+                outputSums[i] += hiddens[j] * weightsHO[j][i];
 
         for (int i = 0; i < output; ++i)  // add biases to input-to-hidden sums
             outputSums[i] += outputBiases[i];
@@ -281,7 +278,7 @@ public class NeuralNetwork
         while (epoch < epochs)
         {
             /* mean squared error (pl:błąd średniokwadratowy) < 0.020 - stopping condition */
-            double helper = meanSquaredError(trainData);
+            double helper = MeanSquaredError(trainData);
             if (helper < 0.020)
             {
                 break;
@@ -300,7 +297,7 @@ public class NeuralNetwork
         }
     }
 
-    private double meanSquaredError(double[][] data) //trainData 
+    private double MeanSquaredError(double[][] data) //trainData 
     {
         double sumSquaredError = 0.0;
         double[] inputValues = new double[input];
@@ -321,7 +318,7 @@ public class NeuralNetwork
         return sumSquaredError / data.Length;
     }
 
-    private static int maxIndex(double[] vector) // helper for Accuracy()
+    private static int MaxIndex(double[] vector) // helper for Accuracy()
     {
         // search an index with max value
         int result = 0;
@@ -336,7 +333,7 @@ public class NeuralNetwork
         return result;
     }
 
-    public double accuracy(double[][] data) //testData % % %
+    public double Accuracy(double[][] data) //testData % % %
     {
         double[] inputValues = new double[input]; // inputs
         double[] targetValues = new double[output]; // targets
@@ -351,7 +348,7 @@ public class NeuralNetwork
 
             // FEEDFORWARD
             myOutputValues = this.Forward(inputValues);
-            int placeOf1 = maxIndex(myOutputValues); // where is 1 ? ? ? ?
+            int placeOf1 = MaxIndex(myOutputValues); // where is 1 ? ? ? ?
 
             if (targetValues[placeOf1] == 1.0) // if 1 is in good place 
                 ++correct;

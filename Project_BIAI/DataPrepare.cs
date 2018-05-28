@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 
 class DataPrepare
 {
-    public static double[] normalizeInput(double[] input, double[][] allData)
+    public static double[] NormalizeInput(double[] input, double[][] allData)
     {
         const int size = 4; //sepal length, sepal width, petal length, petal width
-        double[][] normalizeInput = new double[allData.Length + 1][];
-        for (int a = 0; a < allData.Length; ++a)
+        double[][] normalizeInput = new double[allData.Length+1][];
+        for (int i = 0; i < allData.Length; ++i)
         {
-            normalizeInput[a] = new double[size];
-            for (int b = 0; b < size; ++b)
-                normalizeInput[a][b] = allData[a][b];
+            normalizeInput[i] = new double[size];
+            for (int j = 0; j < size; ++j)
+                normalizeInput[i][j] = allData[i][j];
         }
         normalizeInput[allData.Length] = new double[size];
         normalizeInput[allData.Length] = input;
-        normalize(normalizeInput, new int[] { 0, 1, 2, 3 }); // first 4 columns only ! 
+        Normalize(normalizeInput, new int[] { 0, 1, 2, 3 }); // first 4 columns only ! 
         return normalizeInput[allData.Length];
     }
-    public static void makeTrainTest(double[][] allData, out double[][] trainData, out double[][] testData)
+    public static void MakeTrainTest(double[][] allData, ref double[][] trainData, ref double[][] testData)
     {
         int rows = allData.Length;
-        int columns = allData[0].Length; //7 columns
+        int columns = allData[0].Length; //7 columns, 4 parameters and 3 indicators of flower
         int trainingRows = (int)(rows * 0.80); //80% trainData
         int testRows = rows - trainingRows; //20% testData
 
@@ -37,41 +37,36 @@ class DataPrepare
         for (int i = 0; i < seq.Length; ++i)
             seq[i] = i; // in cell is number of index for example tab[1] = 1 
 
-        Random rnd = new Random(0);
+        Random random = new Random(0);
         for (int i = 0; i < seq.Length; ++i)
         {
-            int r = rnd.Next(i, seq.Length); //into r random number from ( 0 - how much data)
+            int r = random.Next(i, seq.Length); //into r random number from ( 0 - how much data)
             int tmp = seq[r]; //saves values from random cell 
 
             seq[r] = seq[i];
             seq[i] = tmp;
         }
 
-        int helper = 0; // index into sequence[]
-        int j = 0; // index into trainData or testData
+        int sequenceIndex = 0; // index into sequence[]
 
-        //kopiuje 80% danych
-        for (; helper < trainingRows; ++helper) // first rows to train data 
+        //copy 80% of data
+        for (int i=0; sequenceIndex < trainingRows; ++sequenceIndex,++i) // first rows to train data 
         {
-            trainData[j] = new double[columns];
-            int idx = seq[helper];
-            Array.Copy(allData[idx], trainData[j], columns); //Array.Copy(old, copy, copy.Length);
-            ++j;
+            trainData[i] = new double[columns];
+            int idx = seq[sequenceIndex];
+            Array.Copy(allData[idx], trainData[i], columns); //Array.Copy(old, copy, copy.Length);
         }
 
-        j = 0; // reset to start of test data
-
         //copy 20% of data 
-        for (; helper < rows; ++helper)
+        for (int i=0; sequenceIndex < rows; ++sequenceIndex,++i)
         {
-            testData[j] = new double[columns];
-            int idx = seq[helper];
-            Array.Copy(allData[idx], testData[j], columns); //Array.Copy(old, copy, copy.Length);
-            ++j;
+            testData[i] = new double[columns];
+            int idx = seq[sequenceIndex];
+            Array.Copy(allData[idx], testData[i], columns); //Array.Copy(old, copy, copy.Length);
         }
     }
 
-    public static void normalize(double[][] dataMatrix, int[] cols)
+    public static void Normalize(double[][] dataMatrix, int[] cols)
     {
         // normalize specified cols by computing (x - mean) / sd for each value
         //  Xnew = (x - mean) / sd   -> x - input data, sd = standard deviation, Xnew - normalized data 
