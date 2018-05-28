@@ -10,11 +10,14 @@ class Program
     {
         Console.WriteLine("****************** BIAI PROJECT - Neural Network ******************");
         Console.WriteLine("******************  Adam Pałka & Jakub Walczak  *******************\n");
-        Console.WriteLine(" 1 0 0 = Iris Virginica");
-        Console.WriteLine(" 0 1 0 = Iris Versicolor");
-        Console.WriteLine(" 0 0 1 = Iris Setosa\n");
-        Console.WriteLine("DATA: sepal length, sepal width, petal length, petal width");
-        Console.WriteLine("INPUTA DATA example: 5.1, 3.5, 1.4, 0.2");
+        //Console.WriteLine(" 0 0 1 = Iris Setosa");
+        //Console.WriteLine(" 0 1 0 = Iris Versicolor");
+        //Console.WriteLine(" 1 0 0 = Iris Virginica\n");
+        Console.WriteLine("INPUT DATA: sepal length, sepal width, petal length, petal width");
+        Console.WriteLine("INPUT DATA example");
+        Console.WriteLine("5.1, 3.5, 1.4, 0.2 (Iris Setosa)");
+        Console.WriteLine("7.0, 3.2, 4.7, 1.4 (Iris Versicolor)");
+        Console.WriteLine("6.8, 3.0, 5.5, 2.1 (Iris Virginica)");
         Console.WriteLine("*******************************************************************\n\n");
 
         double[][] data = null;
@@ -52,11 +55,8 @@ class Program
         Console.WriteLine("Training time:" + timeDifference.TotalSeconds);
         Console.WriteLine("Training completed!");
         double[] weights = neuralNetwork.GetWeights();
-
-        //Console.WriteLine("nn weights and bias values:");
-        //Tools.showVector(weights, 10, 3, true);
-
-        //Accurancy
+        
+        //Accuracy
         double accurancyTrain = neuralNetwork.Accuracy(dataForTraining);
         Console.WriteLine("--------------------Accurancy on Neural Network--------------------  ");
         Console.WriteLine("\nAccuracy on training data = " + accurancyTrain.ToString("F2"));
@@ -82,7 +82,6 @@ class Program
                 catch(Exception e)
                 {
                     Console.WriteLine("Wrong value, try again!");
-                    //Console.WriteLine(e.GetBaseException());
                 }
                 if (numbers[a] <= 0 )
                 {
