@@ -18,7 +18,7 @@ class Program
         Console.WriteLine("5.1, 3.5, 1.4, 0.2 (Iris Setosa)");
         Console.WriteLine("7.0, 3.2, 4.7, 1.4 (Iris Versicolor)");
         Console.WriteLine("6.8, 3.0, 5.5, 2.1 (Iris Virginica)");
-        Console.WriteLine("*******************************************************************\n\n");
+        Console.WriteLine("*******************************************************************\n");
 
         double[][] data = null;
         double[][] dataForTest = null;
