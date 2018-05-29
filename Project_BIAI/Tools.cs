@@ -12,8 +12,8 @@ class Tools
     {
         string result = "";
         const int length = 3;
-        double hardPrecision = 0.1;
-        double softPrecision = 0.4;
+        double hardPrecision = 0.15;
+        double softPrecision = 0.35;
         double[] nnResults = neuralNetwork.Forward(numbers);
         for (int i = 0; i < length; ++i)
         {
